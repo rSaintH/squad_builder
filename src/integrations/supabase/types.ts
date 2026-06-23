@@ -1,0 +1,434 @@
+export type Json =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: Json | undefined }
+  | Json[]
+
+export type Database = {
+  // Allows to automatically instantiate createClient with right options
+  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
+  __InternalSupabase: {
+    PostgrestVersion: "14.5"
+  }
+  public: {
+    Tables: {
+      formation_positions: {
+        Row: {
+          formation_id: string
+          id: string
+          label: string
+          sort_order: number
+          x: number
+          y: number
+        }
+        Insert: {
+          formation_id: string
+          id?: string
+          label: string
+          sort_order?: number
+          x: number
+          y: number
+        }
+        Update: {
+          formation_id?: string
+          id?: string
+          label?: string
+          sort_order?: number
+          x?: number
+          y?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "formation_positions_formation_id_fkey"
+            columns: ["formation_id"]
+            isOneToOne: false
+            referencedRelation: "formations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      formations: {
+        Row: {
+          created_at: string
+          id: string
+          is_default: boolean
+          lineup_id: string | null
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_default?: boolean
+          lineup_id?: string | null
+          name: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_default?: boolean
+          lineup_id?: string | null
+          name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "formations_lineup_id_fkey"
+            columns: ["lineup_id"]
+            isOneToOne: false
+            referencedRelation: "lineups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lineup_invites: {
+        Row: {
+          created_at: string
+          enabled: boolean
+          expires_at: string | null
+          id: string
+          lineup_id: string
+          requires_auth: boolean
+          role: string
+          token_hash: string
+        }
+        Insert: {
+          created_at?: string
+          enabled?: boolean
+          expires_at?: string | null
+          id?: string
+          lineup_id: string
+          requires_auth?: boolean
+          role?: string
+          token_hash: string
+        }
+        Update: {
+          created_at?: string
+          enabled?: boolean
+          expires_at?: string | null
+          id?: string
+          lineup_id?: string
+          requires_auth?: boolean
+          role?: string
+          token_hash?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lineup_invites_lineup_id_fkey"
+            columns: ["lineup_id"]
+            isOneToOne: false
+            referencedRelation: "lineups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lineup_members: {
+        Row: {
+          clerk_user_id: string | null
+          created_at: string
+          email: string | null
+          id: string
+          lineup_id: string
+          role: string
+        }
+        Insert: {
+          clerk_user_id?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          lineup_id: string
+          role: string
+        }
+        Update: {
+          clerk_user_id?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          lineup_id?: string
+          role?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lineup_members_lineup_id_fkey"
+            columns: ["lineup_id"]
+            isOneToOne: false
+            referencedRelation: "lineups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lineup_slots: {
+        Row: {
+          formation_position_id: string | null
+          id: string
+          lineup_id: string
+          player_id: string | null
+          slot_type: string
+          sort_order: number
+        }
+        Insert: {
+          formation_position_id?: string | null
+          id?: string
+          lineup_id: string
+          player_id?: string | null
+          slot_type?: string
+          sort_order?: number
+        }
+        Update: {
+          formation_position_id?: string | null
+          id?: string
+          lineup_id?: string
+          player_id?: string | null
+          slot_type?: string
+          sort_order?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lineup_slots_formation_position_id_fkey"
+            columns: ["formation_position_id"]
+            isOneToOne: false
+            referencedRelation: "formation_positions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lineup_slots_lineup_id_fkey"
+            columns: ["lineup_id"]
+            isOneToOne: false
+            referencedRelation: "lineups"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lineup_slots_player_id_fkey"
+            columns: ["player_id"]
+            isOneToOne: false
+            referencedRelation: "players"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lineups: {
+        Row: {
+          background_url: string | null
+          club_icon_url: string | null
+          created_at: string
+          formation_id: string | null
+          id: string
+          is_private: boolean
+          name: string
+          owner_clerk_user_id: string | null
+          public_read: boolean
+          public_write: boolean
+          realtime_secret: string
+          share_slug: string
+          updated_at: string
+        }
+        Insert: {
+          background_url?: string | null
+          club_icon_url?: string | null
+          created_at?: string
+          formation_id?: string | null
+          id?: string
+          is_private?: boolean
+          name: string
+          owner_clerk_user_id?: string | null
+          public_read?: boolean
+          public_write?: boolean
+          realtime_secret?: string
+          share_slug: string
+          updated_at?: string
+        }
+        Update: {
+          background_url?: string | null
+          club_icon_url?: string | null
+          created_at?: string
+          formation_id?: string | null
+          id?: string
+          is_private?: boolean
+          name?: string
+          owner_clerk_user_id?: string | null
+          public_read?: boolean
+          public_write?: boolean
+          realtime_secret?: string
+          share_slug?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lineups_formation_fk"
+            columns: ["formation_id"]
+            isOneToOne: false
+            referencedRelation: "formations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      players: {
+        Row: {
+          created_at: string
+          favorite_positions: string[]
+          id: string
+          lineup_id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          favorite_positions?: string[]
+          id?: string
+          lineup_id: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          favorite_positions?: string[]
+          id?: string
+          lineup_id?: string
+          name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "players_lineup_id_fkey"
+            columns: ["lineup_id"]
+            isOneToOne: false
+            referencedRelation: "lineups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      [_ in never]: never
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
+  }
+}
+
+type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
+
+type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
+
+export type Tables<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
+    : never = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+      Row: infer R
+    }
+    ? R
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])
+    ? (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
+        Row: infer R
+      }
+      ? R
+      : never
+    : never
+
+export type TablesInsert<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    : never = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Insert: infer I
+    }
+    ? I
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+        Insert: infer I
+      }
+      ? I
+      : never
+    : never
+
+export type TablesUpdate<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    : never = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Update: infer U
+    }
+    ? U
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+        Update: infer U
+      }
+      ? U
+      : never
+    : never
+
+export type Enums<
+  DefaultSchemaEnumNameOrOptions extends
+    | keyof DefaultSchema["Enums"]
+    | { schema: keyof DatabaseWithoutInternals },
+  EnumName extends DefaultSchemaEnumNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
+    : never = never,
+> = DefaultSchemaEnumNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
+    ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
+    : never
+
+export type CompositeTypes<
+  PublicCompositeTypeNameOrOptions extends
+    | keyof DefaultSchema["CompositeTypes"]
+    | { schema: keyof DatabaseWithoutInternals },
+  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    : never = never,
+> = PublicCompositeTypeNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
+    ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
+    : never
+
+export const Constants = {
+  public: {
+    Enums: {},
+  },
+} as const
